@@ -163,11 +163,11 @@ def outside_view_500_error_handler(request):
     return r
 
 
-def outside_view_x_error_handler(request):
+def outside_view_403_error_handler(request):
 
     # set status
 
-    status1 = status.HTTP_400_BAD_REQUEST
+    status1 = status.HTTP_403_FORBIDDEN
     # set body
     body = '<h1>Can not delete this account, because it have link to send cargo trip with other customer. Go back to admin control <a href=/>Home</a> </h1>'.encode(
         'UTF-8')
