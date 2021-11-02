@@ -231,9 +231,9 @@ MULTI_CAPTCHA_ADMIN = {
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 
-CORS_ORIGIN_ALLOW_ALL = ['http://localhost:3000/', 'http://127.0.0.1:3000/',
-                         'https://letsgo-front-end.herokuapp.com/', 'http://letsgo-front-end.herokuapp.com/', 'http://localhost:3000/', 'http://127.0.0.1:3000/',
-                         'https://letsgo-front-end.herokuapp.com/', 'http://letsgo-front-end.herokuapp.com/']
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000/', 'http://127.0.0.1:3000/',
+                        'https://letsgo-front-end.herokuapp.com/', 'http://letsgo-front-end.herokuapp.com/', 'http://localhost:3000/', 'http://127.0.0.1:3000/',
+                        'https://letsgo-front-end.herokuapp.com/', 'http://letsgo-front-end.herokuapp.com/']
 
 """EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'"""
 
