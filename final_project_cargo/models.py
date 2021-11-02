@@ -28,7 +28,7 @@ class User_inf(AbstractUser):
     username = models.CharField(max_length=225, default="root", unique=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         verbose_name = 'Manage User account'
@@ -104,7 +104,7 @@ class Send_cargo(models.Model):
 def banner(sender, instance, **kwargs):
     if User_inf.objects.filter(pk=instance.pk, is_active=False).exists():
         subject = 'Baner account'
-        mesagge = ('Dear our valued client Your account have been banned, because of some violations related to community standards, such as non-standard naming... etc. Please contact me by email or hotline 19001000000')
+        mesagge = ('Dear our valued client Your account have been banned, because of some violations related to community standards, such as non-standard naming... etc. Please contact me by email or hotline 1009699669')
         from_email = settings.EMAIL_HOST_USER
         send_mail(subject, mesagge, from_email, [instance.email])
 
@@ -112,7 +112,7 @@ def banner(sender, instance, **kwargs):
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
 
-    email_plaintext_message = " please input your password reset key {} into form and choose new own password ".format(
+    email_plaintext_message = " Please input your password reset key {} into form and choose new own password. Your key will auto delete after 15min if you not use ".format(
         reset_password_token.key)
 
     send_mail(

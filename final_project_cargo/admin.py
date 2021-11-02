@@ -10,6 +10,10 @@ from django.dispatch.dispatcher import receiver
 from django.core.exceptions import PermissionDenied
 
 
+from django.contrib.sessions.models import Session
+
+from django_rest_passwordreset.models import ResetPasswordToken
+
 admin.site.site_header = "Let's go admin control "
 admin.site.disable_action('delete_selected')
 
@@ -25,9 +29,9 @@ def delete_user(sender, instance, **kwargs):
 @admin.register(User_inf)
 class Useradmin(ABCXYZ):
     list_display = ('id', 'email', 'first_name', 'last_name',
-                    'phone_number', 'group')
+                    'phone_number', 'group',)
     exclude = ('password',)
-    readonly_fields = ('username',)
+    readonly_fields = ('username', 'id',)
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -39,7 +43,7 @@ class Useradmin(ABCXYZ):
 @admin.register(Send_cargo)
 class Send_cargo_admin(admin.ModelAdmin):
     fields = (
-        'id', 'driver', 'rider', 'pick_up_address', 'drop_off_address', 'status',
+        'id', 'driver', 'rider', 'pick_up_address', 'drop_off_address', 'status', 'cargo_price', 'cargo_distance',
 
         'create_work', 'update_work', 'cargo_weight', 'cargo_note', 'phone_number_get_cargo', 'get_cargo_name',
     )
@@ -57,6 +61,29 @@ class Send_cargo_admin(admin.ModelAdmin):
     readonly_fields = (
         'id', 'create_work', 'update_work',
     )
+
     ordering = ['-update_work']
     search_fields = ['status', 'phone_number_get_cargo',
                      'get_cargo_name', ]
+
+
+"""@admin.register(Session)
+class VisitorAdmin(admin.ModelAdmin):
+    list_display = (
+        'session_key', 'session_data', 'expire_date',
+    )"""
+
+
+admin.site.unregister(ResetPasswordToken)
+
+
+@admin.register(ResetPasswordToken)
+class Visiton(admin.ModelAdmin):
+    list_display = (
+        'user', 'created_at', 'user_agent', 'key'
+
+    )
+    list_display_links = None
+
+    def has_add_permission(self, request):
+        return False

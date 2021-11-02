@@ -18,6 +18,8 @@ import datetime
 
 from decouple import config
 
+import django_heroku
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,7 +33,7 @@ SECRET_KEY = config('Secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1:8000']
 
 
 # Application definition
@@ -52,7 +54,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_rest_passwordreset',
 
-
+    'preventconcurrentlogins',
 
 
     'final_project_cargo',
@@ -71,6 +73,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'preventconcurrentlogins.middleware.PreventConcurrentLoginsMiddleware',
+
 ]
 
 
@@ -102,15 +107,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'final_pro',
+        'NAME': 'd29u801p8ddp6d',
 
-        'USER': 'postgres',
+        'USER': 'ogxayczkwkghyl',
 
-        'PASSWORD': config('Data_base_password'),
+        'PASSWORD': '7910c06fbe4a4af2e0f438adf5eb0a649aaf7ce9b19c8dbbdde00da68c544164',
 
-        'HOST': config('Data_base_host'),
+        'HOST': 'ec2-52-2-118-38.compute-1.amazonaws.com',
 
-        'PORT': '',
+        'PORT': '5432',
 
     }
 }
@@ -172,6 +177,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+django_heroku.settings(locals())
 
 AUTH_USER_MODEL = "final_project_cargo.User_inf"
 ASGI_APPLICATION = 'final_project_app.routing.application'
@@ -199,11 +205,20 @@ SIMPLE_JWT = {
 }
 
 
-CHANNEL_LAYERS = {
+"""CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
 
 
+    },
+}
+"""
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
     },
 }
 
@@ -216,7 +231,9 @@ MULTI_CAPTCHA_ADMIN = {
 RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = ['http://localhost:3000/', 'http://127.0.0.1:3000/',
+                         'https://letsgo-front-end.herokuapp.com/', 'http://letsgo-front-end.herokuapp.com/', 'http://localhost:3000/', 'http://127.0.0.1:3000/',
+                         'https://letsgo-front-end.herokuapp.com/', 'http://letsgo-front-end.herokuapp.com/']
 
 """EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'"""
 
@@ -226,3 +243,13 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+    "CLASS": "django_rest_passwordreset.tokens.RandomNumberTokenGenerator",
+    "OPTIONS": {
+        "min_number": 100000,
+        "max_number": 999999
+    }
+}
+DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME = 0.3
