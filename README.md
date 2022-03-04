@@ -2,3 +2,5 @@
 For the safety reason I have to delete the Profile and some secret key 
 
 https://letgo-admin-backend.herokuapp.com/
+
+Change account github from my account school to my private account!
